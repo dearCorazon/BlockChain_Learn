@@ -8,7 +8,7 @@ import (
 	"math/big"
 )
 var (
-	maxNounce = math.MaxInt64 
+	maxNonce = math.MaxInt64
 )
 
 const targetBits = 24 
@@ -46,12 +46,12 @@ func (pow *ProofOfWork) prepareData(nounce int) []byte {
 func  (pow *ProofOfWork) Run() (int,[]byte) {
 	var hashInt big.Int
 	var hash [32]byte
-	nounce := 0
+	nonce := 0
 	
 	fmt.Printf("Mining  the Block containing \"%s\"\n" ,pow.block.Data)
 	
-	for nounce < maxNounce {
-		data := pow.prepareData(nounce)
+	for nonce < maxNonce {
+		data := pow.prepareData(nonce)
 		
 		hash =  sha256.Sum256(data)
 		fmt.Printf("\r%x",hash)
@@ -60,12 +60,12 @@ func  (pow *ProofOfWork) Run() (int,[]byte) {
 		if hashInt.Cmp(pow.target) == -1 {
 			break
 		} else {
-			nounce++
+			nonce++
 		}
 		
 	}
 	fmt.Print("\n\n")
-	return nounce, hash[:]
+	return nonce, hash[:]
 }
 
 func (pow *ProofOfWork ) Validate() bool {
